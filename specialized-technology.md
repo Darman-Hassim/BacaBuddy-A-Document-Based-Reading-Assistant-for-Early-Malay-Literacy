@@ -12,14 +12,14 @@ When a child reads into the microphone, the computer captures their voice as a d
 
 ### 2. Converting Speech to Text
 
-Next, an **Automatic Speech Recognition (ASR)** model reads these sound features and turns them into Malay text. This project uses the **Encoder-Decoder Transformer** approach (Radford et al., 2023). The model has two parts:
+Next, an **Automatic Speech Recognition (ASR)** model reads these sound features and turns them into Malay text. This project uses the **Encoder-Decoder Transformer** approach. The model has two parts:
 
 - **Encoder:** Looks at the spectrogram "heat map" to understand the speech sounds.
 - **Decoder:** Writes out the predicted Malay words one by one.
 
 ### 3. Forced Alignment
 
-Normal speech-to-text apps try to be helpful by auto-correcting mistakes based on sentence context. This is bad for a reading coach, because the system must catch when a child mispronounces a word. Since BacaBuddy already knows the correct sentence from the OCR step, it uses **Forced Alignment** (Bain et al., 2023; McAuliffe et al., 2017). Forced alignment lines up the child's voice recording word by word against the actual text on the page, and finds the exact start and end time of every word.
+Normal speech to text apps try to be helpful by auto correcting mistakes based on sentence context. This is bad for a reading coach, because the system must catch when a child mispronounces a word. Since BacaBuddy already knows the correct sentence from the OCR step, it uses **Forced Alignment**. Forced alignment lines up the child's voice recording word by word against the actual text on the page, and finds the exact start and end time of every word.
 
 ### 4. Lightweight Local LLM for Malay Feedback
 
@@ -48,11 +48,11 @@ flowchart TD
 
 | Tool / Model / Framework / Method                                                         | Type                                                                  | Role in BacaBuddy                                                                                                                                                                                                                                 |
 | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **OpenAI Whisper** (Radford et al., 2023)                                                 | Encoder-Decoder Transformer ASR Model                                 | Used in its small or base variant to transcribe children's read-aloud Malay speech into text tokens, robustly, even under mild home or classroom background noise.                                                                                |
-| **wav2vec 2.0** (Baevski et al., 2020)                                                    | Self-Supervised Speech Representation Model (CTC)                     | Learns latent acoustic representations directly from raw audio waveforms. It is fine-tuned using Connectionist Temporal Classification (CTC) on Malay speech to produce frame-level phoneme or character probabilities for pronunciation scoring. |
-| **WhisperX** (Bain et al., 2023) and **Montreal Forced Aligner** (McAuliffe et al., 2017) | Phoneme and Word-Level Forced Alignment Tools                         | Align the ASR output against the known OCR reference text to obtain exact word timings, pauses, and word-level pronunciation scores.                                                                                                              |
-| **Meta MMS-TTS** (Pratap et al., 2023) and **Piper TTS**                                  | Neural Text-to-Speech (VITS architecture)                             | Use Variational Inference with adversarial learning for end-to-end speech synthesis. They produce natural, clear Bahasa Melayu speech offline, so the child can hear a slow model reading of any uploaded sentence.                               |
-| **Tesseract OCR** (Smith, 2007) and **Ollama**                                            | Optical Character Recognition Engine and Local Lightweight LLM Runner | Tesseract OCR extracts printed Malay text from uploaded page images and PDFs using LSTM line recognition. Ollama runs a small local LLM that generates safe, encouraging Malay feedback from the alignment scores.                                |
+| **OpenAI Whisper**                                                  | Encoder-Decoder Transformer ASR Model                                 | Used in its small or base variant to transcribe children's read-aloud Malay speech into text tokens, robustly, even under mild home or classroom background noise.                                                                                |
+| **wav2vec 2.0**                                                     | Self-Supervised Speech Representation Model (CTC)                     | Learns latent acoustic representations directly from raw audio waveforms. It is fine-tuned using Connectionist Temporal Classification (CTC) on Malay speech to produce frame-level phoneme or character probabilities for pronunciation scoring. |
+| **WhisperX**  and **Montreal Forced Aligner** (McAuliffe et al., 2017) | Phoneme and Word-Level Forced Alignment Tools                         | Align the ASR output against the known OCR reference text to obtain exact word timings, pauses, and word-level pronunciation scores.                                                                                                              |
+| **Meta MMS-TTS**  and **Piper TTS**                                  | Neural Text-to-Speech (VITS architecture)                             | Use Variational Inference with adversarial learning for end-to-end speech synthesis. They produce natural, clear Bahasa Melayu speech offline, so the child can hear a slow model reading of any uploaded sentence.                               |
+| **Tesseract OCR**  and **Ollama**                                            | Optical Character Recognition Engine and Local Lightweight LLM Runner | Tesseract OCR extracts printed Malay text from uploaded page images and PDFs using LSTM line recognition. Ollama runs a small local LLM that generates safe, encouraging Malay feedback from the alignment scores.                                |
 
 ---
 
@@ -68,7 +68,7 @@ Teachers with 35 students cannot listen to every child read every day. ASR and f
 
 Although this technology fits the problem well, there are three main limitations and risks that must be managed.
 
-1. **Child voice recognition accuracy:** Children aged 7 to 9 have higher-pitched voices and less stable pronunciation than adults. Standard ASR models trained only on adult voices often make mistakes when listening to children (Shivakumar & Georgiou, 2020). In addition, no open Malay children's reading dataset currently exists. To manage this risk, this project builds its own dataset, BacaKids-MY, from 40 to 60 children, and combines it with free public datasets such as speechocean762 (Zhang et al., 2021).
+1. **Child voice recognition accuracy:** Children aged 7 to 9 have higher-pitched voices and less stable pronunciation than adults. Standard ASR models trained only on adult voices often make mistakes when listening to children. In addition, no open Malay children's reading dataset currently exists. To manage this risk, this project builds its own dataset, BacaKids-MY, from 40 to 60 children, and combines it with free public datasets such as speechocean762.
 2. **Hardware limitation:** Running OCR, TTS, ASR, and an LLM on one laptop can slow the computer down or cause it to run out of memory. To manage this, smaller model versions are used during daily operation.
 3. **Noise and image quality:** Loud classroom noise can make the ASR model mishear a child's voice. A dark or blurry phone photo of a book page can cause OCR spelling mistakes. To reduce these risks, users can edit the extracted OCR text before starting, and children can use a basic headset microphone.
 
