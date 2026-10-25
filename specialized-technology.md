@@ -8,7 +8,7 @@ At the fundamental level, the speech and NLP pipeline operates through four core
 
 ### 1. Turning Sound into a Visual Map
 
-When a child reads into the microphone, the computer captures their voice as a digital sound wave. AI models find it hard to read raw sound waves directly, so the system slices the audio into tiny split-second chunks. Each chunk is converted into a **spectrogram**, which is like a "heat map" image of the voice. It shows how strong each frequency is over time, in a way that matches how the human ear hears sound.
+When a child reads into the microphone, the computer captures their voice as a digital sound wave. AI models find it hard to read raw sound waves directly, so the system slices the audio into tiny split second chunks. Each chunk is converted into a **spectrogram**, which is like a "heat map" image of the voice. It shows how strong each frequency is over time, in a way that matches how the human ear hears sound.
 
 ### 2. Converting Speech to Text
 
@@ -38,7 +38,7 @@ flowchart TD
     D -- "Aligned word scores" --> E["5. Small Local LLM via Ollama: Generate Malay feedback, word re-practice and progress report"]
 ```
 
-**Figure 1: BacaBuddy Speech and NLP Processing Pipeline**
+**Figure 1: BacaBuddy Diagram**
 
 ---
 
@@ -48,10 +48,10 @@ flowchart TD
 
 | Tool / Model / Framework / Method                                                         | Type                                                                  | Role in BacaBuddy                                                                                                                                                                                                                                 |
 | ----------------------------------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **OpenAI Whisper**                                                  | Encoder-Decoder Transformer ASR Model                                 | Used in its small or base variant to transcribe children's read-aloud Malay speech into text tokens, robustly, even under mild home or classroom background noise.                                                                                |
-| **wav2vec 2.0**                                                     | Self-Supervised Speech Representation Model (CTC)                     | Learns latent acoustic representations directly from raw audio waveforms. It is fine-tuned using Connectionist Temporal Classification (CTC) on Malay speech to produce frame-level phoneme or character probabilities for pronunciation scoring. |
-| **WhisperX**  and **Montreal Forced Aligner** | Phoneme and Word-Level Forced Alignment Tools                         | Align the ASR output against the known OCR reference text to obtain exact word timings, pauses, and word-level pronunciation scores.                                                                                                              |
-| **Meta MMS-TTS**  and **Piper TTS**                                  | Neural Text-to-Speech (VITS architecture)                             | Use Variational Inference with adversarial learning for end-to-end speech synthesis. They produce natural, clear Bahasa Melayu speech offline, so the child can hear a slow model reading of any uploaded sentence.                               |
+| **OpenAI Whisper**                                                  | Encoder Decoder Transformer ASR Model                                 | Used in its small or base variant to transcribe children's read-aloud Malay speech into text tokens, robustly, even under mild home or classroom background noise.                                                                                |
+| **wav2vec 2.0**                                                     | Self-Supervised Speech Representation Model (CTC)                     | Learns latent acoustic representations directly from raw audio waveforms. It is fine tuned using Connectionist Temporal Classification (CTC) on Malay speech to produce frame level phoneme or character probabilities for pronunciation scoring. |
+| **WhisperX**  and **Montreal Forced Aligner** | Phoneme and Word Level Forced Alignment Tools                         | Align the ASR output against the known OCR reference text to obtain exact word timings, pauses, and word level pronunciation scores.                                                                                                              |
+| **Meta MMS-TTS**  and **Piper TTS**                                  | Neural Text-to-Speech (VITS architecture)                             | Use Variational Inference with adversarial learning for end to end speech synthesis. They produce natural, clear Bahasa Melayu speech offline, so the child can hear a slow model reading of any uploaded sentence.                               |
 | **Tesseract OCR**  and **Ollama**                                            | Optical Character Recognition Engine and Local Lightweight LLM Runner | Tesseract OCR extracts printed Malay text from uploaded page images and PDFs using LSTM line recognition. Ollama runs a small local LLM that generates safe, encouraging Malay feedback from the alignment scores.                                |
 
 ---
@@ -68,7 +68,7 @@ Teachers with 35 students cannot listen to every child read every day. ASR and f
 
 Although this technology fits the problem well, there are three main limitations and risks that must be managed.
 
-1. **Child voice recognition accuracy:** Children aged 7 to 9 have higher-pitched voices and less stable pronunciation than adults. Standard ASR models trained only on adult voices often make mistakes when listening to children. In addition, no open Malay children's reading dataset currently exists. To manage this risk, this project builds its own dataset, BacaKids-MY, from 40 to 60 children, and combines it with free public datasets such as speechocean762.
+1. **Child voice recognition accuracy:** Children aged 7 to 9 have higher pitched voices and less stable pronunciation than adults. Standard ASR models trained only on adult voices often make mistakes when listening to children. In addition, no open Malay children's reading dataset currently exists. To manage this risk, this project builds its own dataset, from 40 to 60 children, and combines it with free public datasets such as speechocean762.
 2. **Hardware limitation:** Running OCR, TTS, ASR, and an LLM on one laptop can slow the computer down or cause it to run out of memory. To manage this, smaller model versions are used during daily operation.
 3. **Noise and image quality:** Loud classroom noise can make the ASR model mishear a child's voice. A dark or blurry phone photo of a book page can cause OCR spelling mistakes. To reduce these risks, users can edit the extracted OCR text before starting, and children can use a basic headset microphone.
 
@@ -81,7 +81,7 @@ Although this technology fits the problem well, there are three main limitations
 | **Child voice privacy**          | High privacy: children's voice recordings stay 100% on the laptop and never go online. | Low privacy: children's voice recordings must be sent to external company servers. |
 | **Internet requirement**         | Works offline: can be used in rural schools or homes without internet.                 | Needs fast internet: stops working if the school Wi-Fi is slow or disconnected.    |
 | **Cost**                         | Free: uses free open-source tools on a normal laptop.                                  | Paid subscription: charges money for every minute of audio and every text prompt.  |
-| **Training on Malay child data** | Flexible: the model can be fine-tuned using our own dataset.                           | Locked: closed commercial models cannot be custom-trained on our dataset.          |
+| **Training on Malay child data** | Flexible: the model can be fine tuned using our own dataset.                           | Locked: closed commercial models cannot be custom trained on our dataset.          |
 | **Hardware requirement**         | Needs a laptop with a dedicated GPU and small models.                                  | Can run on a very weak computer because all heavy work happens on cloud servers.   |
 
 ### Final Choice and Justification
